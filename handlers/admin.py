@@ -1,5 +1,5 @@
 from aiogram import types, Dispatcher
-from configg import dp, bot
+from config import dp, bot
 from random import choice
 
 async def pin_bot(message: types.Message):
@@ -7,8 +7,9 @@ async def pin_bot(message: types.Message):
         await bot.pin_chat_message(message.chat.id, message.message_id)
     else:
         print('сообщение должно быть ответом')
-    emoj = ['⚽', '🏀', '🥅', '🎲', '🎯', '🎰', '🎳']
-    if message.text == 'game':
-        await bot.send_dice((message.chat.id,emoj))
+async def game_bot(message: types.Message):
+    azart = ['⚽', '🏀', '🥅', '🎲', '🎯', '🎰', '🎳']
+    await bot.send_dice(message.chat.id, emoji='azart')
 def register_handlers_admin(dp: Dispatcher):
     dp.register_message_handler(pin_bot, commands=['pin'])
+    dp.register_message_handler(game_bot, commands=['game'])
