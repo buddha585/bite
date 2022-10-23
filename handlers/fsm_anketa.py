@@ -1,10 +1,11 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
-from aiogram .dispatcher.filters.state import State, StatesGroup
+from aiogram.dispatcher.filters.state import State, StatesGroup
 from config import bot
 from random import choice
 from Keyboards.client_kb import gender_markup, submit_markup, cancel_markup
+from database.bot_db import sql_command_insert
 
 mentor_ids = []
 
@@ -13,8 +14,9 @@ class FSMAdmin(StatesGroup):
     name = State()
     age = State()
     direction = State()
-    group = State()
+    groupe = State()
     gender = State()
+    submit = State()
 async def fsm_start(message: types.Message):
     if message.chat.type == 'private':
         await FSMAdmin.photo.set()
@@ -62,9 +64,9 @@ async def load_direction(message: types.Message, state: FSMContext):
         await FSMAdmin.next()
         await message.answer('группa?')
 
-async def load_group(message: types.Message, state: FSMContext):
+async def load_groupe(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
-        data['group'] = message.text
+        data['groupe'] = message.text
         await FSMAdmin.next()
         await message.answer('какой твой пол?')
 
@@ -73,7 +75,7 @@ async def load_gender(message: types.Message, state: FSMContext):
         data['gender'] = message.text
         await bot.send_photo(message.from_user.id, data['photo'],
                              caption=f"{data['name']}, {data['age']}, {data['gender']} "
-                                     f"{data['region']}\n\n{data['username']}")
+                                     f"{data['direction']}\n\n{data['username']}")
     await FSMAdmin.next()
     await message.answer('верно?!', reply_markup=submit_markup)
 
@@ -101,12 +103,12 @@ def register_handlers_fsm_anketa(dp:Dispatcher):
     dp.register_message_handler(cancel_reg, state='*', commands=['cancel'])
     dp.register_message_handler(cancel_reg, Text(equals='cancel', ignore_case=True),
                                 state='*')
-    dp.register_message_handler(fsm_start, commands=['anket'])
+    dp.register_message_handler(fsm_start, commands=['anketa'])
     dp.register_message_handler(load_photo, state=FSMAdmin.photo, content_types=['photo'])
     dp.register_message_handler(load_name, state=FSMAdmin.name)
     dp.register_message_handler(load_age, state=FSMAdmin.age)
     dp.register_message_handler(load_direction, state=FSMAdmin.direction)
-    dp.register_message_handler(load_group, state=FSMAdmin.group)
+    dp.register_message_handler(load_groupe, state=FSMAdmin.groupe)
     dp.register_message_handler(load_gender, state=FSMAdmin.gender)
     dp.register_message_handler(submit, state=FSMAdmin.submit)
 
