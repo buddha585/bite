@@ -19,7 +19,7 @@ async def work_out():
 
 async def scheduler():
     aioschedule.every().friday.at('16:30').do(read_vagabond)
-    aioschedule.every().tuesday.at('17:40').do(work_out)
+    aioschedule.every().tuesday.at('17:16').do(work_out)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(5)

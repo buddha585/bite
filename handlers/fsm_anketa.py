@@ -75,7 +75,7 @@ async def load_gender(message: types.Message, state: FSMContext):
         data['gender'] = message.text
         await bot.send_photo(message.from_user.id, data['photo'],
                              caption=f"{data['name']}, {data['age']}, {data['gender']} "
-                                     f"{data['direction']}\n\n{data['username']}")
+                                     f"{data['direction' ]}\n\n{data['username']}")
     await FSMAdmin.next()
     await message.answer('верно?!', reply_markup=submit_markup)
 
