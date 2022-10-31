@@ -1,0 +1,9 @@
+version: 3.3
+services:
+  bot:
+    container_name: tombot
+    restart: always
+    build: .
+    dockerfile: Dockerfile
+    volumes:
+      -/opt/services/bot/falbot
